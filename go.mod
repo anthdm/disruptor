@@ -1,3 +1,3 @@
-module github.com/anthdm/go-disruptor
+module github.com/anthdm/disruptor
 
 go 1.19
