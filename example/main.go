@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/smartystreets-prototypes/go-disruptor"
+	"github.com/anthdm/disruptor"
 )
 
 func main() {
@@ -34,7 +34,7 @@ func publish(myDisruptor disruptor.Disruptor) {
 
 type MyConsumer struct{}
 
-func (this MyConsumer) Consume(lower, upper int64) {
+func (c MyConsumer) Consume(lower, upper int64) {
 	for ; lower <= upper; lower++ {
 		message := ringBuffer[lower&BufferMask]
 		if message != lower {

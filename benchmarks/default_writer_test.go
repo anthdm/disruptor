@@ -5,7 +5,7 @@ import (
 	"math"
 	"testing"
 
-	"github.com/smartystreets-prototypes/go-disruptor"
+	"github.com/anthdm/disruptor"
 )
 
 func BenchmarkWriterReserve(b *testing.B) {

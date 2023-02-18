@@ -3,7 +3,7 @@ package benchmarks
 import (
 	"testing"
 
-	"github.com/smartystreets-prototypes/go-disruptor"
+	"github.com/anthdm/disruptor"
 )
 
 func BenchmarkCursorStore(b *testing.B) {
