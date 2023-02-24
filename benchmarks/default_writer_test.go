@@ -8,6 +8,20 @@ import (
 	"github.com/anthdm/disruptor"
 )
 
+func TestXxx(t *testing.T) {
+	read, written := disruptor.NewCursor(), disruptor.NewCursor()
+	writer := disruptor.NewWriter(written, read, 1024)
+	buf := make([]int64, 1024)
+
+	for i := int64(0); i < 10; i++ {
+		go func(i int64) {
+			sequence := writer.Reserve(1)
+			buf[sequence] = i
+			read.Store(sequence)
+		}(i)
+	}
+}
+
 func BenchmarkWriterReserve(b *testing.B) {
 	read, written := disruptor.NewCursor(), disruptor.NewCursor()
 	writer := disruptor.NewWriter(written, read, 1024)

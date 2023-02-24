@@ -1,6 +1,9 @@
 package disruptor
 
-import "runtime"
+import (
+	"runtime"
+	"sync/atomic"
+)
 
 type DefaultWriter struct {
 	written  *Cursor // the ring buffer has been written up to this sequence
@@ -25,15 +28,18 @@ func (this *DefaultWriter) Reserve(count int64) int64 {
 		panic(ErrMinimumReservationSize)
 	}
 
-	this.previous += count
-	for spin := int64(0); this.previous-this.capacity > this.gate; spin++ {
+	prev := atomic.LoadInt64(&this.previous)
+	prevPlusCount := prev + count
+	atomic.StoreInt64(&this.previous, prevPlusCount)
+
+	for spin := int64(0); prev-this.capacity > this.gate; spin++ {
 		if spin&SpinMask == 0 {
 			runtime.Gosched() // LockSupport.parkNanos(1L); http://bit.ly/1xiDINZ
 		}
 
 		this.gate = this.upstream.Load()
 	}
-	return this.previous
+	return prevPlusCount
 }
 
 func (this *DefaultWriter) Commit(_, upper int64) { this.written.Store(upper) }
