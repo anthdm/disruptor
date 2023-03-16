@@ -12,7 +12,11 @@ In Go, the current implementation of a channel (`chan`) maintains a lock around 
 Example Usage
 -------------
 
-```
+```go
+package main
+
+
+
 func main() {
     writer, reader := disruptor.New(
         disruptor.WithCapacity(BufferSize),
